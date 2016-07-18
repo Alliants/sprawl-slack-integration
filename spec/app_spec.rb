@@ -5,8 +5,8 @@ describe "Cuba" do
     it "registers a new notification" do
       message = { "foo" => "bar" }
       expect(Broadcast).to receive(:process)
-        .with(Notification.new(source: "example.org", message: message))
-      post "/notification", payload: message
+        .with(Notification.new(event: message))
+      post "/notification", source: "http://some.source", message: message.to_json
 
       expect(last_response.body).to eq "message received"
     end
