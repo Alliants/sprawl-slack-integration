@@ -7,10 +7,12 @@ class Broadcast
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
 
+    message = notification.message
+
     conn.post do |req|
       req.url ENV["SLACK_INTEGRATION"]
       req.headers["Content-Type"] = "application/json"
-      req.body = "{ \"text\": \"#{notification.message}\" }"
-    end
+      req.body = "{ \"text\": \"#{message}\" }"
+    end unless message.nil?
   end
 end
