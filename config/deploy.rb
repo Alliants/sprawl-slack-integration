@@ -31,6 +31,7 @@ set :shared_paths, ['log', 'tmp/pids', 'tmp/sockets']
 # `mina deploy` or `mina rake`.
 task :environment do
   invoke :'rbenv:load'
+  queue! %[source /home/ubuntu/.slack_integration]
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
