@@ -9,10 +9,10 @@ require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
-set :domain, 'sprawl.alliantsdev.com'
+set :domain, 'sprawl-slack-integration.alliantsdev.com'
 set :user, 'ubuntu'
-set :deploy_to, '/var/www/sprawl'
-set :repository, 'git@github.com:Alliants/sprawl.git'
+set :deploy_to, '/var/www/sprawl-slack-integration'
+set :repository, 'git@github.com:Alliants/sprawl-slack-integration.git'
 set :branch, 'master'
 
 # For system-wide RVM install.
@@ -20,7 +20,7 @@ set :branch, 'master'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/subscribers.production.yml', 'log', 'tmp/pids', 'tmp/sockets']
+set :shared_paths, ['log', 'tmp/pids', 'tmp/sockets']
 
 # Optional settings:
 #   set :user, 'foobar'    # Username in the server to SSH to.
@@ -48,8 +48,6 @@ task :setup => :environment do
 
   queue! %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/pids")
   queue! %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/pids")
-
-  queue! %[touch "#{deploy_to}/#{shared_path}/config/subscribers.production.yml"]
 
   if repository
     repo_host = repository.split(%r{@|://}).last.split(%r{:|\/}).first
@@ -79,8 +77,4 @@ task :deploy => :environment do
       invoke :'puma:start'
     end
   end
-end
-
-task :start_sidekiq => :environment do
-  queue! "cd #{deploy_to}/current ; sidekiq -r ./lib/broadcast_worker.rb -L /var/www/sprawl/shared/log/sidekiq.log -d -e production"
 end

@@ -1,20 +1,18 @@
-# Sprawl - Nobody has ever seen him, but he's important
+# Slack integration - Making some noice coming from Sprawl
 
-Sprawl works as a notification broadcasting mechanism of the TopGun project.
-
-## Pre-requisites
-
-* Redis
+This is a very simple notification bot that will post messages to Slack
+`team-top-gun` channel when receiving events from Goose.
 
 ## Installation
 
-`git clone git@github.com:Alliants/goose-server.git`
-
-`bundle`
+```
+$ git clone git@github.com:Alliants/goose-server.git
+$ bundle
+```
 
 ## To Run locally
 
-`bundle exec foreman start`
+` $ SLACK_INTEGRATION='/services/123123123/123123123213213' bundle exec rackup`
 
 visit
 
@@ -22,44 +20,16 @@ visit
 
 ## Basic usage
 
+This service listens to messages coming in `/notification` endpoint and
+translates them into messages going to Slack.
+
+In a production scenario, Sprawl will be configured to notify this integration
+about events generated in the system.
+
 ### Configuration
-Sprawl uses a list of services that needs to be notified to know where messages
-need to be broadcasted to. This list is configured by environment and you can
-find it in `./config/subscribers.[env].yml`
 
-The usual structure is as follows:
+A slack income hook needs to be setup in an environment variable:
 
-```
-- "http://example1.com"
-- "https://example2.com"
-```
+`SLACK_INTEGRATION='/services/123123123/123123123213213'`
 
-### Sending notifications
-
-To broadcast a notification to all subscribers, the only thin that needs to be
-done is do a POST request to `/notification` with a `payload` that contains the message to be
-broadcasted to the sprawl service.
-
-The mechanism is fire and forget, so there is not way to determine if the
-message was received by all the consumers. Sprawl will return `message received`
-once the message has been queued for delivery.
-
-Example:
-
-```
-$ curl -X POST -d 'payload={"username":"xyz","password":"xyz"}' http://localhost:9292/notification
-```
-
-### Receiving notifications
-The services that need to be notified need to follow a certain structure to be
-able to receive notifications. The convention is to implement a `/notification`
-endpoint that accepts POST.
-
-An example message will be in json format and will look like the following:
-
-```
-{
-  "source"=>"www.source.com", # Originator of the message
-  "message"=>content_sent_from_source # original content sent
-}
-```
+To read more about them please check [the official guide](https://api.slack.com/incoming-webhooks)
