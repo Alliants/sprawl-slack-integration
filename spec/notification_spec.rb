@@ -21,7 +21,7 @@ describe Notification do
       }
       notification = described_class.new(event: event)
 
-      expect(notification.message).to eq "jacksonhyde has closed a pull_request called <https://github.com/Alliants/fs-reset-password/pull/2|Validation Email Templates> on 'Alliants/fs-reset-password'"
+      expect(notification.message).to eq "jacksonhyde has closed a pull_request called <https://github.com/Alliants/fs-reset-password/pull/2|Validation Email Templates> on <https://github.com/Alliants/fs-reset-password|Alliants/fs-reset-password>"
     end
   end
 end

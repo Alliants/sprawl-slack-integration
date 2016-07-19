@@ -1,7 +1,7 @@
 class Notification
   class PullRequestMessage
     def self.generate_message_for(event)
-      "#{event.dig('payload', 'owner')} has #{event.fetch('action', 'unknown')} a #{event.fetch('event_type', 'unknown')} called <#{event.dig('payload', 'link')}|#{event.dig('payload', 'title')}> on '#{event.dig('payload', 'repository')}'"
+      "#{event.dig('payload', 'owner')} has #{event.fetch('action', 'unknown')} a #{event.fetch('event_type', 'unknown')} called <#{event.dig('payload', 'link')}|#{event.dig('payload', 'title')}> on <https://github.com/#{event.dig('payload', 'repository')}|#{event.dig('payload', 'repository')}>"
     end
   end
 
