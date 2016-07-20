@@ -5,6 +5,15 @@ class Notification
     end
   end
 
+  class WeeklyPullRequestReportMessage
+    def self.generate_message_for(event)
+      start_date = Time.parse(event.dig("payload", "start_date")).strftime("%d/%m/%Y")
+      end_date = Time.parse(event.dig("payload", "end_date")).strftime("%d/%m/%Y")
+
+      "Between #{start_date} and #{end_date} this is the pull request activity: \n  * opened #{event.dig("payload", "pull_request_opened")} \n * closed #{event.dig("payload", "pull_request_closed")} \n * merged #{event.dig("payload", "pull_request_merged")} \n Great work everyone!"
+    end
+  end
+
   class NullMessage
     def self.generate_message_for(event)
       nil
@@ -12,7 +21,8 @@ class Notification
   end
 
   TYPES_MAPPER = {
-    "pull_request" => PullRequestMessage
+    "pull_request" => PullRequestMessage,
+    "weekly_report" => WeeklyPullRequestReportMessage
   }
 
   def initialize(event:)
